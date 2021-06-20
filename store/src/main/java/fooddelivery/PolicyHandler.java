@@ -52,19 +52,16 @@ public class PolicyHandler{
             
     // }
 
-    // @StreamListener(KafkaProcessor.INPUT)
-    // public void wheneverPayCanceled_CancelDelivery(@Payload PayCanceled payCanceled){
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverPayCanceled_CancelDelivery(@Payload PayCanceled payCanceled){
 
-    //     if(!payCanceled.validate()) return;
+        if(!payCanceled.validate()) return;
 
-    //     System.out.println("\n\n##### listener CancelDelivery : " + payCanceled.toJson() + "\n\n");
+        System.out.println("\n\n##### listener CancelDelivery : " + payCanceled.toJson() + "\n\n");
 
-    //     // Sample Logic //
-    //     // Store store = new Store();
-    //     // storeRepository.save(store);
-    //     // Delivery delivery = new Delivery();
-    //     // deliveryRepository.save(delivery);
-    // }
+        Delivery delivery = deliveryRepository.findByOrderId(payCanceled.getOrderId());
+        deliveryRepository.delete(delivery);
+    }
 
     @StreamListener(KafkaProcessor.INPUT)
     public void whatever(@Payload String eventString){}

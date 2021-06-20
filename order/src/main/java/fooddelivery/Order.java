@@ -28,6 +28,12 @@ public class Order {
         ordered.publishAfterCommit();
     }
 
+    @PreRemove
+    public void onPreRemove() {
+        OrderCanceled orderCanceled = new OrderCanceled(this.getId(), this.getStoreId(), this.getProductName(), this.getQuantity(), this.getPrice(), this.getStatus());
+        orderCanceled.publishAfterCommit();
+    }
+
     public Long getId() {
         return id;
     }

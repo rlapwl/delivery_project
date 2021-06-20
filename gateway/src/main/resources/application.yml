@@ -19,7 +19,7 @@ spring:
         - id: store
           uri: http://localhost:8083
           predicates:
-            - Path=/stores/** 
+            - Path=/stores/** /deliveries/**
         - id: review
           uri: http://localhost:8084
           predicates:

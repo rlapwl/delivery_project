@@ -14,9 +14,15 @@ public class Payment {
     private int price;
 
     @PostPersist
-    public void onPostPersist(){
+    public void onPostPersist() {
         PayApproved payApproved = new PayApproved(this.getId(), this.getOrderId(), this.getStoreId(), this.getPrice());
         payApproved.publishAfterCommit();
+    }
+
+    @PreRemove
+    public void onPreRemove() {
+        PayCanceled payCanceled = new PayCanceled(this.getId(), this.getOrderId(), this.getStoreId(), this.getPrice());
+        payCanceled.publishAfterCommit();
     }
 
     public Long getId() {

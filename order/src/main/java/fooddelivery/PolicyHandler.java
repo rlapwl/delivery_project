@@ -25,18 +25,17 @@ public class PolicyHandler{
         orderRepository.save(order);
     }
 
-    // @StreamListener(KafkaProcessor.INPUT)
-    // public void wheneverDeliveryCanceled_ModifyOrderStatus(@Payload DeliveryCanceled deliveryCanceled){
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverDeliveryCanceled_ModifyOrderStatus(@Payload DeliveryCanceled deliveryCanceled){
 
-    //     if(!deliveryCanceled.validate()) return;
+        if(!deliveryCanceled.validate()) return;
 
-    //     //System.out.println("\n\n##### listener ModifyOrderStatus : " + deliveryCanceled.toJson() + "\n\n");
+        System.out.println("\n\n##### listener ModifyOrderStatus : " + deliveryCanceled.toJson() + "\n\n");
 
-    //     // Sample Logic //
-    //     // Order order = new Order();
-    //     // orderRepository.save(order);
-            
-    // }
+        // Sample Logic //
+        Order order = orderRepository.findById(deliveryCanceled.getOrderId()).get();
+        orderRepository.delete(order);            
+    }
 
 
     @StreamListener(KafkaProcessor.INPUT)

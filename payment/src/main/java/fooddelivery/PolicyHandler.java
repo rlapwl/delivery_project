@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PolicyHandler{
-    @Autowired PaymentRepository paymentRepository;
+    @Autowired 
+    PaymentRepository paymentRepository;
 
     @StreamListener(KafkaProcessor.INPUT)
     public void wheneverOrderCanceled_CancelPayment(@Payload OrderCanceled orderCanceled){
@@ -16,11 +17,9 @@ public class PolicyHandler{
         if(!orderCanceled.validate()) return;
 
         System.out.println("\n\n##### listener CancelPayment : " + orderCanceled.toJson() + "\n\n");
-
-        // Sample Logic //
-        // Payment payment = new Payment();
-        // paymentRepository.save(payment);
-            
+        
+        Payment payment = paymentRepository.findByOrderId(orderCanceled.getId());
+        paymentRepository.delete(payment);
     }
 
 

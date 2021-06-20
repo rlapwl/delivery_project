@@ -21,9 +21,15 @@ public class Delivery {
     }
 
     @PostPersist
-    public void onPostPersist(){
+    public void onPostPersist() {
         DeliveryStarted deliveryStarted = new DeliveryStarted(this.getId(), this.getStoreId(), this.getOrderId());
         deliveryStarted.publishAfterCommit();
+    }
+    
+    @PreRemove
+    public void onPreRemove() {
+        DeliveryCanceled deliveryCanceled = new DeliveryCanceled(this.getId(), this.getStoreId(), this.getOrderId());
+        deliveryCanceled.publishAfterCommit();
     }
 
     public Long getId() {
