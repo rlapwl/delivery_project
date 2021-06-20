@@ -1,81 +1,53 @@
 package fooddelivery;
 
 import javax.persistence.*;
-import org.springframework.beans.BeanUtils;
-import java.util.List;
-import java.util.Date;
+
+import fooddelivery.external.Payment;
 
 @Entity
-@Table(name="Order_table")
+@Table(name="orders")
 public class Order {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private Long storeId;
     private String productName;
-    private Integer quantity;
-    private Integer price;
-    private String status;
+    private int quantity;
+    private int price;
+    private String status = "Order";
 
     @PostPersist
-    public void onPostPersist(){
-        Ordered ordered = new Ordered();
-        BeanUtils.copyProperties(this, ordered);
-        ordered.publishAfterCommit();
+    public void onPostPersist() {
 
-        //Following code causes dependency to external APIs
-        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
-
-        fooddelivery.external.Payment payment = new fooddelivery.external.Payment();
-        // mappings goes here
-        Application.applicationContext.getBean(fooddelivery.external.PaymentService.class)
+        Payment payment = new Payment(this.getId(), this.getStoreId(), this.getPrice() * this.getQuantity());
+        OrderApplication.applicationContext.getBean(fooddelivery.external.PaymentService.class)
             .pay(payment);
 
-
-        OrderCanceled orderCanceled = new OrderCanceled();
-        BeanUtils.copyProperties(this, orderCanceled);
-        orderCanceled.publishAfterCommit();
-
-
+        Ordered ordered = new Ordered(this.getId(), this.getStoreId(), this.getProductName(), this.getQuantity(), this.getPrice(), "Paid");
+        ordered.publishAfterCommit();
     }
-
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
     public Long getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(Long storeId) {
-        this.storeId = storeId;
-    }
     public String getProductName() {
         return productName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-    public Integer getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
     public String getStatus() {
         return status;
     }
@@ -83,8 +55,5 @@ public class Order {
     public void setStatus(String status) {
         this.status = status;
     }
-
-
-
 
 }

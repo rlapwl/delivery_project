@@ -1,36 +1,18 @@
 package fooddelivery;
 
 import javax.persistence.*;
-import org.springframework.beans.BeanUtils;
-import java.util.List;
-import java.util.Date;
 
 @Entity
-@Table(name="Store_table")
+@Table(name="stores")
 public class Store {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String address;
     private String telNumber;
-    private Integer reviewCount;
-
-    @PostPersist
-    public void onPostPersist(){
-        DeliveryStarted deliveryStarted = new DeliveryStarted();
-        BeanUtils.copyProperties(this, deliveryStarted);
-        deliveryStarted.publishAfterCommit();
-
-
-        DeliveryCanceled deliveryCanceled = new DeliveryCanceled();
-        BeanUtils.copyProperties(this, deliveryCanceled);
-        deliveryCanceled.publishAfterCommit();
-
-
-    }
-
+    private int reviewCount;
 
     public Long getId() {
         return id;
@@ -60,15 +42,12 @@ public class Store {
     public void setTelNumber(String telNumber) {
         this.telNumber = telNumber;
     }
-    public Integer getReviewCount() {
+    public int getReviewCount() {
         return reviewCount;
     }
 
-    public void setReviewCount(Integer reviewCount) {
+    public void setReviewCount(int reviewCount) {
         this.reviewCount = reviewCount;
     }
-
-
-
 
 }

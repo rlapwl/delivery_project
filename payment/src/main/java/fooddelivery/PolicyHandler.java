@@ -1,8 +1,6 @@
 package fooddelivery;
 
 import fooddelivery.config.kafka.KafkaProcessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -20,8 +18,8 @@ public class PolicyHandler{
         System.out.println("\n\n##### listener CancelPayment : " + orderCanceled.toJson() + "\n\n");
 
         // Sample Logic //
-        Payment payment = new Payment();
-        paymentRepository.save(payment);
+        // Payment payment = new Payment();
+        // paymentRepository.save(payment);
             
     }
 

@@ -20,7 +20,7 @@ public class AbstractEvent {
 
     public AbstractEvent(){
         this.setEventType(this.getClass().getSimpleName());
-        SimpleDateFormat defaultSimpleDateFormat = new SimpleDateFormat("YYYYMMddHHmmss");
+        SimpleDateFormat defaultSimpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         this.timestamp = defaultSimpleDateFormat.format(new Date());
     }
 
@@ -38,11 +38,8 @@ public class AbstractEvent {
     }
 
     public void publish(String json){
-        if( json != null ){
+        if (json != null){
 
-            /**
-             * spring streams 방식
-             */
             KafkaProcessor processor = OrderApplication.applicationContext.getBean(KafkaProcessor.class);
             MessageChannel outputChannel = processor.outboundTopic();
 

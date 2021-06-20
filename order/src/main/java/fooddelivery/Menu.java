@@ -1,7 +1,6 @@
 package fooddelivery;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name="Menu_table")

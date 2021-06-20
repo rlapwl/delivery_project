@@ -1,66 +1,38 @@
 package fooddelivery;
 
 import javax.persistence.*;
-import org.springframework.beans.BeanUtils;
-import java.util.List;
-import java.util.Date;
 
 @Entity
-@Table(name="Payment_table")
+@Table(name="payments")
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private Long orderId;
     private Long storeId;
-    private Integer price;
+    private int price;
 
     @PostPersist
     public void onPostPersist(){
-        PayApproved payApproved = new PayApproved();
-        BeanUtils.copyProperties(this, payApproved);
+        PayApproved payApproved = new PayApproved(this.getId(), this.getOrderId(), this.getStoreId(), this.getPrice());
         payApproved.publishAfterCommit();
-
-
-        PayCanceled payCanceled = new PayCanceled();
-        BeanUtils.copyProperties(this, payCanceled);
-        payCanceled.publishAfterCommit();
-
-
     }
-
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
     public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
     public Long getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(Long storeId) {
-        this.storeId = storeId;
-    }
-    public Integer getPrice() {
+    public int getPrice() {
         return price;
     }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-
-
 
 }

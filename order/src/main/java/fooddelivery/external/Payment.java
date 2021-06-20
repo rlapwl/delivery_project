@@ -3,33 +3,30 @@ package fooddelivery.external;
 public class Payment {
 
     private Long id;
-    private Long orderId;
-    private Long storeId;
-    private Integer price;
+    private final Long orderId;
+    private final Long storeId;
+    private final int price;
+
+    public Payment(Long orderId, Long storeId, int price) {
+        this.orderId = orderId;
+        this.storeId = storeId;
+        this.price = price;
+    }
 
     public Long getId() {
         return id;
     }
-    public void setId(Long id) {
-        this.id = id;
-    }
+
     public Long getOrderId() {
         return orderId;
     }
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
+    
     public Long getStoreId() {
         return storeId;
     }
-    public void setStoreId(Long storeId) {
-        this.storeId = storeId;
-    }
-    public Integer getPrice() {
+    
+    public int getPrice() {
         return price;
-    }
-    public void setPrice(Integer price) {
-        this.price = price;
     }
 
 }
